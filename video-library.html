@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>参考動画ライブラリ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0c0c10;
+    --bg2: #14141a;
+    --bg3: #1c1c24;
+    --bg4: #242430;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --text2: #8888a0;
+    --text3: #55556a;
+    --accent: #7c6fff;
+    --accent2: #5b54cc;
+    --teal: #2dd4a0;
+    --amber: #f0a030;
+    --coral: #f07060;
+    --pink: #d466a0;
+    --blue: #4499ee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  #app { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 4px 0;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 30px; height: 30px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 15px; height: 15px; fill: #fff; }
+  .logo-text { font-size: 15px; font-weight: 500; color: var(--text); }
+  .add-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .add-btn:hover { background: var(--accent2); }
+
+  /* Search */
+  .search-wrap { position: relative; margin-bottom: 14px; }
+  .search-icon {
+    position: absolute; left: 13px; top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px; color: var(--text3);
+    pointer-events: none;
+  }
+  .search-bar {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg2);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .search-bar:focus { border-color: var(--border2); }
+  .search-bar::placeholder { color: var(--text3); }
+
+  /* Tags */
+  .tag-row {
+    display: flex; gap: 6px;
+    overflow-x: auto; margin-bottom: 20px;
+    padding-bottom: 2px; scrollbar-width: none;
+  }
+  .tag-row::-webkit-scrollbar { display: none; }
+  .tag-pill {
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg2); color: var(--text2);
+    white-space: nowrap; flex-shrink: 0;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .tag-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .section-label { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
+
+  /* Cards */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px;
+    margin-bottom: 10px; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .card:hover { border-color: var(--accent2); background: var(--bg3); }
+  .card-top { display: flex; gap: 12px; align-items: flex-start; }
+  .thumb {
+    width: 88px; height: 56px; border-radius: 10px;
+    background: var(--bg3); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+  .thumb-placeholder { font-size: 10px; color: var(--text3); text-align: center; padding: 4px; line-height: 1.4; }
+  .card-info { flex: 1; min-width: 0; }
+  .card-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 7px; flex-wrap: wrap; }
+  .source-badge { font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
+  .yt { background: #3a1515; color: #f09595; }
+  .tt { background: #0d2a2a; color: #5DCAA5; }
+  .other { background: #1a1f35; color: #85B7EB; }
+  .no-url { background: var(--bg4); color: var(--text3); }
+  .drive-badge { background: #0d2410; color: var(--teal); font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
+  .card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .card-tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: 500; }
+  .tag-演出 { background: #1e1a3a; color: #AFA9EC; }
+  .tag-訴求 { background: #0d2420; color: #5DCAA5; }
+  .tag-構成 { background: #2a1e0a; color: #EF9F27; }
+  .tag-撮影 { background: #2a1008; color: #F0997B; }
+  .tag-テキスト { background: #0a1e35; color: #85B7EB; }
+  .tag-音楽 { background: #2a0f1e; color: #ED93B1; }
+  .card-memo { font-size: 12px; color: var(--text2); margin-top: 9px; line-height: 1.6; border-top: 1px solid var(--border); padding-top: 9px; }
+  .ts-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
+  .ts-chip { font-size: 11px; padding: 3px 9px; border-radius: 6px; background: #1e1a3a; color: #AFA9EC; font-weight: 500; font-family: 'DM Mono', monospace; }
+  .empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; line-height: 1.8; }
+  .empty-icon { width: 48px; height: 48px; background: var(--bg2); border-radius: 12px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; }
+
+  /* Status */
+  .status-bar {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 10px; padding: 10px 18px;
+    font-size: 13px; color: var(--text2);
+    display: none; z-index: 200; white-space: nowrap;
+  }
+  .status-bar.show { display: block; }
+
+  /* Overlay / Modal */
+  .overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.75); z-index: 100;
+    overflow-y: auto;
+  }
+  .modal {
+    background: var(--bg2);
+    border-radius: 16px 16px 0 0;
+    padding: 20px; width: 100%; max-width: 480px;
+    margin: 80px auto 0;
+  }
+  .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 18px; color: var(--text); }
+  .field { margin-bottom: 14px; }
+  .field label { font-size: 11px; color: var(--text3); display: block; margin-bottom: 6px; letter-spacing: 0.3px; text-transform: uppercase; }
+  .field input, .field textarea {
+    width: 100%; padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px; font-size: 14px;
+    color: var(--text); background: var(--bg);
+    outline: none; font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--border2); }
+  .field input::placeholder, .field textarea::placeholder { color: var(--text3); }
+  .field textarea { height: 72px; resize: none; line-height: 1.5; }
+  .tag-select { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag-toggle {
+    padding: 6px 13px; border-radius: 20px; font-size: 12px;
+    border: 1px solid var(--border); background: var(--bg);
+    color: var(--text3); cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .tag-toggle.sel { border-color: var(--accent); background: #1e1a3a; color: #AFA9EC; }
+  .modal-btns { display: flex; gap: 8px; margin-top: 18px; padding-bottom: 20px; }
+  .btn-cancel {
+    flex: 1; padding: 12px; border: 1px solid var(--border);
+    border-radius: 10px; background: none; color: var(--text2);
+    font-size: 14px; cursor: pointer; font-family: inherit;
+  }
+  .btn-save {
+    flex: 2; padding: 12px; border: none; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 14px;
+    font-weight: 500; cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-save:hover { background: var(--accent2); }
+
+  /* Timestamps */
+  .ts-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .ts-item { display: flex; align-items: center; gap: 8px; background: var(--bg); border-radius: 8px; padding: 8px 10px; border: 1px solid var(--border); }
+  .ts-time-input { width: 60px; background: none; border: none; color: var(--accent); font-size: 12px; outline: none; font-family: 'DM Mono', monospace; font-weight: 500; }
+  .ts-label-input { flex: 1; background: none; border: none; color: var(--text); font-size: 13px; outline: none; font-family: inherit; }
+  .ts-label-input::placeholder { color: var(--text3); }
+  .ts-del { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 0 2px; line-height: 1; }
+  .add-ts-btn {
+    width: 100%; padding: 9px; border: 1px dashed var(--border2);
+    border-radius: 8px; background: none; color: var(--text3);
+    font-size: 13px; cursor: pointer; margin-top: 6px; font-family: inherit; transition: color 0.15s;
+  }
+  .add-ts-btn:hover { color: var(--text2); }
+
+  /* Image upload */
+  .img-upload-area {
+    width: 100%; padding: 20px; border: 1px dashed var(--border2);
+    border-radius: 10px; background: var(--bg); text-align: center;
+    cursor: pointer; color: var(--text3); font-size: 13px; transition: color 0.15s;
+  }
+  .img-upload-area:hover { color: var(--text2); }
+  .img-preview { width: 100%; height: 120px; border-radius: 10px; object-fit: cover; margin-top: 8px; display: none; }
+
+  /* Detail modal */
+  .detail-thumb { width: 100%; height: 180px; border-radius: 12px; background: var(--bg3); margin-bottom: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .open-link { display: block; text-align: center; margin-top: 10px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: #AFA9EC; text-decoration: none; background: #1e1a3a; }
+  .archive-link { display: block; text-align: center; margin-top: 6px; padding: 10px; border: 1px solid #1e2a1e; border-radius: 10px; font-size: 13px; color: var(--teal); text-decoration: none; background: #0d2420; }
+  .del-btn { margin-top: 8px; width: 100%; padding: 11px; border: 1px solid var(--border); border-radius: 10px; background: none; color: var(--text3); font-size: 13px; cursor: pointer; font-family: inherit; }
+  .detail-ts-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+  .detail-ts-item { display: flex; align-items: center; gap: 10px; background: var(--bg); border-radius: 8px; padding: 9px 12px; }
+  .detail-ts-time { font-size: 13px; color: #AFA9EC; font-weight: 500; min-width: 44px; font-family: 'DM Mono', monospace; }
+  .detail-ts-label { font-size: 13px; color: var(--text2); }
+
+  /* Loading */
+  .loading { text-align: center; padding: 40px; color: var(--text3); font-size: 14px; }
+  .spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg>
+      </div>
+      <span class="logo-text">参考動画ライブラリ</span>
+    </div>
+    <button class="add-btn" onclick="openAdd()">+ 追加</button>
+  </div>
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1a5.5 5.5 0 1 0 3.45 9.86l2.6 2.6a.75.75 0 1 0 1.06-1.06l-2.6-2.6A5.5 5.5 0 0 0 6.5 1zm-4 5.5a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/></svg>
+    <input class="search-bar" placeholder="タイトル・メモで検索..." oninput="render()" id="search">
+  </div>
+  <div class="tag-row" id="tag-row"></div>
+  <div class="section-label" id="count-label"></div>
+  <div id="list"><div class="loading"><div class="spinner"></div>読み込み中...</div></div>
+</div>
+
+<!-- Add Modal -->
+<div class="overlay" id="add-modal">
+  <div class="modal">
+    <h2>動画を追加</h2>
+    <div class="field"><label>URL（任意）</label><input id="m-url" placeholder="https://youtube.com/... など"></div>
+    <div class="field"><label>アーカイブURL（任意・DriveリンクなどURL消失時の保険）</label><input id="m-archive" placeholder="https://drive.google.com/..."></div>
+    <div class="field"><label>タイトル</label><input id="m-title" placeholder="作品名・動画タイトル"></div>
+    <div class="field">
+      <label>画像（任意・スクショやスケッチ）</label>
+      <div class="img-upload-area" onclick="document.getElementById('img-input').click()">タップして画像を選択</div>
+      <input type="file" id="img-input" accept="image/*" style="display:none" onchange="onImgSelect(event)">
+      <img id="img-preview" class="img-preview">
+    </div>
+    <div class="field"><label>メモ</label><textarea id="m-memo" placeholder="この演出がいい、冒頭の掴みがうまい、カメラが低い…など"></textarea></div>
+    <div class="field">
+      <label>タイムスタンプ（見てほしい場面）</label>
+      <div class="ts-list" id="ts-list"></div>
+      <button class="add-ts-btn" onclick="addTs()">+ タイムスタンプを追加</button>
+    </div>
+    <div class="field"><label>タグ</label><div class="tag-select" id="tag-select"></div></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAdd()">キャンセル</button>
+      <button class="btn-save" onclick="saveVideo()">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="overlay" id="detail-modal">
+  <div class="modal" id="detail-content"></div>
+</div>
+
+<div class="status-bar" id="status-bar"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOncsbCqNWGQCWt57gNIEZ4ZcJ6Z2ZAEo",
+  authDomain: "bcu-video-library.firebaseapp.com",
+  projectId: "bcu-video-library",
+  storageBucket: "bcu-video-library.firebasestorage.app",
+  messagingSenderId: "765619405099",
+  appId: "1:765619405099:web:201a9904269bedb89d856e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const colRef = collection(db, "videos");
+
+const TAGS = ['演出','訴求','構成','撮影','テキスト','音楽'];
+let activeTag = 'すべて';
+let selectedTags = [];
+let timestamps = [];
+let imgData = null;
+let videos = [];
+
+// リアルタイム同期
+const q = query(colRef, orderBy("createdAt", "desc"));
+onSnapshot(q, (snapshot) => {
+  videos = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  render();
+});
+
+function getThumbnail(url) {
+  try {
+    if (!url) return null;
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      let id = '';
+      if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1].split('?')[0];
+      else if (url.includes('v=')) id = url.split('v=')[1].split('&')[0];
+      if (id) return 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg';
+    }
+  } catch(e) {}
+  return null;
+}
+
+function getSource(url) {
+  if (!url) return 'no-url';
+  if (url.includes('youtube') || url.includes('youtu.be')) return 'yt';
+  if (url.includes('tiktok')) return 'tt';
+  return 'other';
+}
+
+function sourceLabel(s) {
+  return { yt: 'YouTube', tt: 'TikTok', other: 'URL', 'no-url': 'URLなし' }[s] || 'URL';
+}
+
+function showStatus(msg) {
+  const el = document.getElementById('status-bar');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+window.renderTagRow = function() {
+  const all = ['すべて', ...TAGS];
+  document.getElementById('tag-row').innerHTML = all.map(t =>
+    `<button class="tag-pill${activeTag===t?' active':''}" onclick="setTag('${t}')">${t}</button>`
+  ).join('');
+}
+
+window.renderTagSelect = function() {
+  document.getElementById('tag-select').innerHTML = TAGS.map(t =>
+    `<span class="tag-toggle${selectedTags.includes(t)?' sel':''}" onclick="toggleTag('${t}')">${t}</span>`
+  ).join('');
+}
+
+window.toggleTag = function(t) {
+  selectedTags = selectedTags.includes(t) ? selectedTags.filter(x=>x!==t) : [...selectedTags, t];
+  renderTagSelect();
+}
+
+window.setTag = function(t) { activeTag = t; render(); }
+
+window.renderTsList = function() {
+  document.getElementById('ts-list').innerHTML = timestamps.map((ts, i) => `
+    <div class="ts-item">
+      <input class="ts-time-input" value="${ts.time}" placeholder="0:00" oninput="timestamps[${i}].time=this.value">
+      <input class="ts-label-input" value="${ts.label}" placeholder="どんな場面？" oninput="timestamps[${i}].label=this.value">
+      <button class="ts-del" onclick="removeTs(${i})">×</button>
+    </div>`).join('');
+}
+
+window.addTs = function() {
+  timestamps.push({ time: '0:00', label: '' });
+  renderTsList();
+}
+
+window.removeTs = function(i) { timestamps.splice(i, 1); renderTsList(); }
+
+window.onImgSelect = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    imgData = ev.target.result;
+    const prev = document.getElementById('img-preview');
+    prev.src = imgData; prev.style.display = 'block';
+    document.querySelector('.img-upload-area').textContent = 'タップして変更';
+  };
+  reader.readAsDataURL(file);
+}
+
+window.render = function() {
+  renderTagRow();
+  const q = document.getElementById('search').value.toLowerCase();
+  let list = videos.filter(v => {
+    const matchTag = activeTag === 'すべて' || (v.tags||[]).includes(activeTag);
+    const matchQ = !q || (v.title||'').toLowerCase().includes(q) || (v.memo||'').toLowerCase().includes(q);
+    return matchTag && matchQ;
+  });
+  const lbl = document.getElementById('count-label');
+  lbl.textContent = list.length > 0 ? list.length + '件' : '';
+  const el = document.getElementById('list');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="#55556a"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg></div>動画がまだありません<br>「+ 追加」から参考動画を登録しましょう</div>`;
+    return;
+  }
+  el.innerHTML = list.map(v => {
+    const src = getSource(v.url);
+    const thumb = getThumbnail(v.url) || (v.img || null);
+    const tsChips = v.timestamps && v.timestamps.length
+      ? '<div class="ts-row">' + v.timestamps.map(ts => `<span class="ts-chip">${ts.time}${ts.label ? ' ' + ts.label : ''}</span>`).join('') + '</div>' : '';
+    return `<div class="card" onclick="openDetail('${v.id}')">
+      <div class="card-top">
+        <div class="thumb">${thumb ? `<img src="${thumb}" onerror="this.parentNode.innerHTML='<div class=thumb-placeholder>${sourceLabel(src)}</div>'">` : `<div class="thumb-placeholder">${sourceLabel(src)}</div>`}</div>
+        <div class="card-info">
+          <div class="card-title">${v.title || '(タイトルなし)'}</div>
+          <div class="card-meta">
+            <span class="source-badge ${src}">${sourceLabel(src)}</span>
+            ${v.archiveUrl ? '<span class="drive-badge">Drive保存済</span>' : ''}
+          </div>
+          <div class="card-tags">${(v.tags||[]).map(t => `<span class="card-tag tag-${t}">${t}</span>`).join('')}</div>
+        </div>
+      </div>
+      ${tsChips}
+      ${v.memo ? `<div class="card-memo">${v.memo}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+window.openAdd = function() {
+  selectedTags = []; timestamps = []; imgData = null;
+  document.getElementById('m-url').value = '';
+  document.getElementById('m-archive').value = '';
+  document.getElementById('m-title').value = '';
+  document.getElementById('m-memo').value = '';
+  document.getElementById('img-preview').style.display = 'none';
+  document.querySelector('.img-upload-area').textContent = 'タップして画像を選択';
+  renderTagSelect(); renderTsList();
+  document.getElementById('add-modal').style.display = 'block';
+}
+
+window.closeAdd = function() { document.getElementById('add-modal').style.display = 'none'; }
+
+window.saveVideo = async function() {
+  const url = document.getElementById('m-url').value.trim();
+  const title = document.getElementById('m-title').value.trim() || url || '(タイトルなし)';
+  const v = {
+    url,
+    archiveUrl: document.getElementById('m-archive').value.trim(),
+    title,
+    memo: document.getElementById('m-memo').value.trim(),
+    tags: [...selectedTags],
+    timestamps: timestamps.filter(t => t.time),
+    img: imgData,
+    createdAt: Date.now()
+  };
+  try {
+    await addDoc(colRef, v);
+    closeAdd();
+    showStatus('保存しました');
+  } catch(e) {
+    alert('保存に失敗しました: ' + e.message);
+  }
+}
+
+window.openDetail = function(id) {
+  const v = videos.find(x => x.id === id);
+  if (!v) return;
+  const src = getSource(v.url);
+  const thumb = getThumbnail(v.url) || (v.img || null);
+  const tsHtml = v.timestamps && v.timestamps.length
+    ? `<div style="margin-bottom:12px">
+        <div style="font-size:11px;color:var(--text3);letter-spacing:0.3px;text-transform:uppercase;margin-bottom:8px">タイムスタンプ</div>
+        <div class="detail-ts-list">${v.timestamps.map(ts =>
+          `<div class="detail-ts-item"><span class="detail-ts-time">${ts.time}</span><span class="detail-ts-label">${ts.label||''}</span></div>`
+        ).join('')}</div></div>` : '';
+  document.getElementById('detail-content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <span style="font-size:15px;font-weight:500;color:var(--text);flex:1;margin-right:12px">${v.title}</span>
+      <button style="background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;line-height:1" onclick="closeDetail()">×</button>
+    </div>
+    <div class="detail-thumb">${thumb ? `<img src="${thumb}" onerror="this.style.display='none'">` : `<span style="font-size:13px;color:var(--text3)">${sourceLabel(src)}</span>`}</div>
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+      <span class="source-badge ${src}">${sourceLabel(src)}</span>
+      ${(v.tags||[]).map(t => `<span class="card-tag tag-${t}">${t}</span>`).join('')}
+    </div>
+    ${tsHtml}
+    ${v.memo ? `<div style="font-size:13px;color:var(--text2);line-height:1.7;background:var(--bg);padding:12px;border-radius:10px;margin-bottom:12px">${v.memo}</div>` : ''}
+    ${v.url ? `<a class="open-link" href="${v.url}" target="_blank">動画を開く →</a>` : ''}
+    ${v.archiveUrl ? `<a class="archive-link" href="${v.archiveUrl}" target="_blank">アーカイブを開く（Drive等）→</a>` : ''}
+    <button class="del-btn" onclick="deleteVideo('${v.id}')">削除する</button>
+  `;
+  document.getElementById('detail-modal').style.display = 'block';
+}
+
+window.closeDetail = function() { document.getElementById('detail-modal').style.display = 'none'; }
+
+window.deleteVideo = async function(id) {
+  if (!confirm('この動画を削除しますか？')) return;
+  try {
+    await deleteDoc(doc(db, "videos", id));
+    closeDetail();
+    showStatus('削除しました');
+  } catch(e) {
+    alert('削除に失敗しました: ' + e.message);
+  }
+}
+
+renderTagRow();
+</script>
+</body>
+</html>
