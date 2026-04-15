@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>参考動画ライブラリ</title>
+<title>参考クリエイティブライブラリ</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap');
   :root {
@@ -194,8 +194,8 @@
     <svg viewBox="0 0 16 16"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg>
   </div>
   <div>
-    <div class="login-title">参考動画ライブラリ</div>
-    <div class="login-sub" style="margin-top:8px">チームで動画の演出・訴求を共有するツール</div>
+    <div class="login-title">参考クリエイティブライブラリ</div>
+    <div class="login-sub" style="margin-top:8px">チームで動画・静止画の演出・訴求を共有するツール</div>
   </div>
   <button class="google-btn" onclick="signInWithGoogle()">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -214,7 +214,7 @@
     <div class="header">
       <div class="logo">
         <div class="logo-mark"><svg viewBox="0 0 16 16"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg></div>
-        <span class="logo-text">参考動画ライブラリ</span>
+        <span class="logo-text">参考クリエイティブライブラリ</span>
       </div>
       <div class="header-right">
         <button class="add-btn" onclick="openAdd()">+ 追加</button>
@@ -227,6 +227,8 @@
     </div>
     <div class="tab-row">
       <button class="tab-btn active" id="tab-all" onclick="setTab('all')">すべて</button>
+      <button class="tab-btn" id="tab-video" onclick="setTab('video')">動画</button>
+      <button class="tab-btn" id="tab-image" onclick="setTab('image')">静止画</button>
       <button class="tab-btn" id="tab-fav" onclick="setTab('fav')">お気に入り</button>
     </div>
     <div class="search-wrap">
@@ -243,6 +245,13 @@
 <div class="overlay" id="add-modal">
   <div class="modal">
     <h2>動画を追加</h2>
+    <div class="field">
+      <label>種別</label>
+      <div style="display:flex;gap:8px">
+        <button id="type-video" onclick="setContentType('video')" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--accent);background:#1e1a3a;color:#AFA9EC;font-size:13px;cursor:pointer;font-family:inherit">動画</button>
+        <button id="type-image" onclick="setContentType('image')" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--text3);font-size:13px;cursor:pointer;font-family:inherit">静止画</button>
+      </div>
+    </div>
     <div class="field"><label>URL（任意）</label><input id="m-url" placeholder="https://youtube.com/... など"></div>
     <div class="field"><label>アーカイブURL（任意・DriveリンクなどURL消失時の保険）</label><input id="m-archive" placeholder="https://drive.google.com/..."></div>
     <div class="field"><label>タイトル</label><input id="m-title" placeholder="作品名・動画タイトル"></div>
@@ -303,6 +312,7 @@ let videos = [];
 let editingId = null;
 let currentUser = null;
 let myLikes = {};
+let contentType = 'video';
 
 // Auth state
 onAuthStateChanged(auth, async (user) => {
@@ -408,8 +418,10 @@ function avatarHtml(photoURL, displayName, size = 18) {
 
 window.setTab = function(tab) {
   activeTab = tab;
-  document.getElementById('tab-all').classList.toggle('active', tab === 'all');
-  document.getElementById('tab-fav').classList.toggle('active', tab === 'fav');
+  ['all','video','image','fav'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) el.classList.toggle('active', tab === t);
+  });
   render();
 }
 
@@ -460,13 +472,21 @@ window.render = function() {
   let list = videos.filter(v => {
     const matchTag = activeTag === 'すべて' || (v.tags||[]).includes(activeTag);
     const matchQ = !q || (v.title||'').toLowerCase().includes(q) || (v.memo||'').toLowerCase().includes(q);
-    const matchFav = activeTab === 'all' || myLikes[v.id];
-    return matchTag && matchQ && matchFav;
+    const matchFav = activeTab === 'all' || activeTab === 'video' || activeTab === 'image' || myLikes[v.id];
+    const matchType = activeTab === 'all' || activeTab === 'fav'
+      ? true
+      : activeTab === 'video' ? (v.contentType || 'video') === 'video'
+      : (v.contentType || 'video') === 'image';
+    const matchFavOnly = activeTab !== 'fav' || myLikes[v.id];
+    return matchTag && matchQ && matchType && matchFavOnly;
   });
   document.getElementById('count-label').textContent = list.length > 0 ? list.length + '件' : '';
   const el = document.getElementById('list');
   if (!list.length) {
-    const msg = activeTab === 'fav' ? 'お気に入りがまだありません' : '動画がまだありません<br>「+ 追加」から参考動画を登録しましょう';
+    const msg = activeTab === 'fav' ? 'お気に入りがまだありません'
+      : activeTab === 'video' ? '動画がまだありません'
+      : activeTab === 'image' ? '静止画がまだありません'
+      : 'まだ登録がありません<br>「+ 追加」から登録しましょう';
     el.innerHTML = `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="#55556a"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg></div>${msg}</div>`;
     return;
   }
@@ -486,6 +506,7 @@ window.render = function() {
           <div class="card-title">${v.title||'(タイトルなし)'}</div>
           <div class="card-meta">
             <span class="source-badge ${src}">${sourceLabel(src)}</span>
+            ${v.contentType==='image'?'<span class="source-badge" style="background:#1e2a1e;color:#5DCAA5">静止画</span>':''}
             ${v.archiveUrl?'<span class="drive-badge">Drive保存済</span>':''}
           </div>
           <div class="card-tags">${(v.tags||[]).map(t=>`<span class="card-tag tag-${t}">${t}</span>`).join('')}</div>
@@ -572,8 +593,7 @@ window.openDetail = async function(id) {
     </button>
     ${v.url?`<a class="open-link" href="${v.url}" target="_blank">動画を開く →</a>`:''}
     ${v.archiveUrl?`<a class="archive-link" href="${v.archiveUrl}" target="_blank">アーカイブを開く →</a>`:''}
-    ${v.uploaderId===currentUser?.uid?`<button class="action-btn edit-btn" onclick="openEdit('${id}')">編集する</button>`:''}
-    <button class="action-btn del-btn" onclick="deleteVideo('${id}')">削除する</button>
+    ${v.uploaderId===currentUser?.uid?`<button class="action-btn edit-btn" onclick="openEdit('${id}')">編集する</button><button class="action-btn del-btn" onclick="deleteVideo('${id}')">削除する</button>`:''}
     <div class="comments-section">
       <div class="comments-title">コメント</div>
       <div id="comments-list-${id}">${commentsHtml || '<div style="font-size:13px;color:var(--text3);padding:8px 0">まだコメントはありません</div>'}</div>
@@ -611,16 +631,27 @@ window.postComment = async function(videoId) {
 
 window.closeDetail = function() { document.getElementById('detail-modal').style.display = 'none'; }
 
+window.setContentType = function(type) {
+  contentType = type;
+  document.getElementById('type-video').style.background = type === 'video' ? '#1e1a3a' : 'none';
+  document.getElementById('type-video').style.borderColor = type === 'video' ? 'var(--accent)' : 'var(--border)';
+  document.getElementById('type-video').style.color = type === 'video' ? '#AFA9EC' : 'var(--text3)';
+  document.getElementById('type-image').style.background = type === 'image' ? '#0d2420' : 'none';
+  document.getElementById('type-image').style.borderColor = type === 'image' ? 'var(--teal)' : 'var(--border)';
+  document.getElementById('type-image').style.color = type === 'image' ? 'var(--teal)' : 'var(--text3)';
+}
+
 window.openAdd = function() {
-  editingId = null; selectedTags = []; timestamps = []; imgData = null;
+  editingId = null; selectedTags = []; timestamps = []; imgData = null; contentType = 'video';
   document.getElementById('m-url').value = '';
   document.getElementById('m-archive').value = '';
   document.getElementById('m-title').value = '';
   document.getElementById('m-memo').value = '';
   document.getElementById('img-preview').style.display = 'none';
   document.querySelector('.img-upload-area').textContent = 'タップして画像を選択';
-  document.querySelector('#add-modal h2').textContent = '動画を追加';
+  document.querySelector('#add-modal h2').textContent = 'クリエイティブを追加';
   document.querySelector('.btn-save').textContent = '保存する';
+  setContentType('video');
   renderTagSelect(); renderTsList();
   document.getElementById('add-modal').style.display = 'block';
 }
@@ -628,6 +659,7 @@ window.openAdd = function() {
 window.openEdit = function(id) {
   const v = videos.find(x => x.id === id); if (!v) return;
   editingId = id; selectedTags = [...(v.tags||[])]; timestamps = [...(v.timestamps||[])]; imgData = v.img || null;
+  contentType = v.contentType || 'video';
   document.getElementById('m-url').value = v.url || '';
   document.getElementById('m-archive').value = v.archiveUrl || '';
   document.getElementById('m-title').value = v.title || '';
@@ -635,8 +667,9 @@ window.openEdit = function(id) {
   const prev = document.getElementById('img-preview');
   if (imgData) { prev.src = imgData; prev.style.display = 'block'; document.querySelector('.img-upload-area').textContent = 'タップして変更'; }
   else { prev.style.display = 'none'; document.querySelector('.img-upload-area').textContent = 'タップして画像を選択'; }
-  document.querySelector('#add-modal h2').textContent = '動画を編集';
+  document.querySelector('#add-modal h2').textContent = 'クリエイティブを編集';
   document.querySelector('.btn-save').textContent = '更新する';
+  setContentType(contentType);
   renderTagSelect(); renderTsList();
   closeDetail();
   document.getElementById('add-modal').style.display = 'block';
@@ -650,7 +683,8 @@ window.saveVideo = async function() {
   const v = {
     url, archiveUrl: document.getElementById('m-archive').value.trim(), title,
     memo: document.getElementById('m-memo').value.trim(),
-    tags: [...selectedTags], timestamps: timestamps.filter(t => t.time), img: imgData,
+    tags: [...selectedTags], timestamps: timestamps.filter(t => t.time),
+    img: imgData, contentType: contentType || 'video',
   };
   try {
     if (editingId) {
