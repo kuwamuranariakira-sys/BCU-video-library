@@ -572,7 +572,8 @@ window.openDetail = async function(id) {
     </button>
     ${v.url?`<a class="open-link" href="${v.url}" target="_blank">動画を開く →</a>`:''}
     ${v.archiveUrl?`<a class="archive-link" href="${v.archiveUrl}" target="_blank">アーカイブを開く →</a>`:''}
-    ${v.uploaderId===currentUser?.uid?`<button class="action-btn edit-btn" onclick="openEdit('${id}')">編集する</button><button class="action-btn del-btn" onclick="deleteVideo('${id}')">削除する</button>`:''}
+    ${v.uploaderId===currentUser?.uid?`<button class="action-btn edit-btn" onclick="openEdit('${id}')">編集する</button>`:''}
+    <button class="action-btn del-btn" onclick="deleteVideo('${id}')">削除する</button>
     <div class="comments-section">
       <div class="comments-title">コメント</div>
       <div id="comments-list-${id}">${commentsHtml || '<div style="font-size:13px;color:var(--text3);padding:8px 0">まだコメントはありません</div>'}</div>
