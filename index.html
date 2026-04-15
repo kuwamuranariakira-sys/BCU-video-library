@@ -181,7 +181,9 @@
   .comment-input::placeholder { color: var(--text3); }
   .comment-send-btn { padding: 10px 14px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-size: 13px; cursor: pointer; font-family: inherit; white-space: nowrap; }
 
-  .loading { text-align: center; padding: 40px; color: var(--text3); font-size: 14px; }
+  .platform-select { display: flex; flex-wrap: wrap; gap: 6px; }
+  .platform-toggle { padding: 6px 13px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text3); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .platform-toggle.sel { border-color: var(--accent); background: #1e1a3a; color: #AFA9EC; }
   .spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -235,6 +237,7 @@
       <svg class="search-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1a5.5 5.5 0 1 0 3.45 9.86l2.6 2.6a.75.75 0 1 0 1.06-1.06l-2.6-2.6A5.5 5.5 0 0 0 6.5 1zm-4 5.5a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/></svg>
       <input class="search-bar" placeholder="タイトル・メモで検索..." oninput="render()" id="search">
     </div>
+    <div class="tag-row" id="platform-row"></div>
     <div class="tag-row" id="tag-row"></div>
     <div class="section-label" id="count-label"></div>
     <div id="list"><div class="loading"><div class="spinner"></div>読み込み中...</div></div>
@@ -253,6 +256,10 @@
       </div>
     </div>
     <div class="field"><label>URL（任意）</label><input id="m-url" placeholder="https://youtube.com/... など"></div>
+    <div class="field">
+      <label>プラットフォーム</label>
+      <div class="platform-select" id="platform-select"></div>
+    </div>
     <div class="field"><label>アーカイブURL（任意・DriveリンクなどURL消失時の保険）</label><input id="m-archive" placeholder="https://drive.google.com/..."></div>
     <div class="field"><label>タイトル</label><input id="m-title" placeholder="作品名・動画タイトル"></div>
     <div class="field">
@@ -303,8 +310,11 @@ const provider = new GoogleAuthProvider();
 const colRef = collection(db, "videos");
 
 const TAGS = ['演出','訴求','構成','撮影','テキスト','音楽'];
+const PLATFORMS = ['YouTube','YouTube Short','TikTok','Instagram','Instagram Reels','X','その他'];
 let activeTag = 'すべて';
 let activeTab = 'all';
+let activePlatform = 'すべて';
+let selectedPlatform = '';
 let selectedTags = [];
 let timestamps = [];
 let imgData = null;
@@ -430,8 +440,23 @@ window.renderTagRow = function() {
   document.getElementById('tag-row').innerHTML = all.map(t =>
     `<button class="tag-pill${activeTag===t?' active':''}" onclick="setTag('${t}')">${t}</button>`
   ).join('');
+  const allP = ['すべて', ...PLATFORMS];
+  document.getElementById('platform-row').innerHTML = allP.map(p =>
+    `<button class="tag-pill${activePlatform===p?' active':''}" onclick="setPlatform('${p}')">${p}</button>`
+  ).join('');
 }
 window.setTag = function(t) { activeTag = t; render(); }
+window.setPlatform = function(p) { activePlatform = p; render(); }
+
+window.renderPlatformSelect = function() {
+  document.getElementById('platform-select').innerHTML = PLATFORMS.map(p =>
+    `<span class="platform-toggle${selectedPlatform===p?' sel':''}" onclick="togglePlatform('${p}')">${p}</span>`
+  ).join('');
+}
+window.togglePlatform = function(p) {
+  selectedPlatform = selectedPlatform === p ? '' : p;
+  renderPlatformSelect();
+}
 
 window.renderTagSelect = function() {
   document.getElementById('tag-select').innerHTML = TAGS.map(t =>
@@ -458,10 +483,21 @@ window.onImgSelect = function(e) {
   const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    imgData = ev.target.result;
-    const prev = document.getElementById('img-preview');
-    prev.src = imgData; prev.style.display = 'block';
-    document.querySelector('.img-upload-area').textContent = 'タップして変更';
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 600;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
+      else { if (h > MAX) { w = w * MAX / h; h = MAX; } }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      imgData = canvas.toDataURL('image/jpeg', 0.7);
+      const prev = document.getElementById('img-preview');
+      prev.src = imgData; prev.style.display = 'block';
+      document.querySelector('.img-upload-area').textContent = 'タップして変更';
+    };
+    img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 }
@@ -472,13 +508,13 @@ window.render = function() {
   let list = videos.filter(v => {
     const matchTag = activeTag === 'すべて' || (v.tags||[]).includes(activeTag);
     const matchQ = !q || (v.title||'').toLowerCase().includes(q) || (v.memo||'').toLowerCase().includes(q);
-    const matchFav = activeTab === 'all' || activeTab === 'video' || activeTab === 'image' || myLikes[v.id];
     const matchType = activeTab === 'all' || activeTab === 'fav'
       ? true
       : activeTab === 'video' ? (v.contentType || 'video') === 'video'
       : (v.contentType || 'video') === 'image';
     const matchFavOnly = activeTab !== 'fav' || myLikes[v.id];
-    return matchTag && matchQ && matchType && matchFavOnly;
+    const matchPlatform = activePlatform === 'すべて' || (v.platform || '') === activePlatform;
+    return matchTag && matchQ && matchType && matchFavOnly && matchPlatform;
   });
   document.getElementById('count-label').textContent = list.length > 0 ? list.length + '件' : '';
   const el = document.getElementById('list');
@@ -506,6 +542,7 @@ window.render = function() {
           <div class="card-title">${v.title||'(タイトルなし)'}</div>
           <div class="card-meta">
             <span class="source-badge ${src}">${sourceLabel(src)}</span>
+            ${v.platform?`<span class="source-badge" style="background:var(--bg4);color:var(--text2)">${v.platform}</span>`:''}
             ${v.contentType==='image'?'<span class="source-badge" style="background:#1e2a1e;color:#5DCAA5">静止画</span>':''}
             ${v.archiveUrl?'<span class="drive-badge">Drive保存済</span>':''}
           </div>
@@ -642,7 +679,7 @@ window.setContentType = function(type) {
 }
 
 window.openAdd = function() {
-  editingId = null; selectedTags = []; timestamps = []; imgData = null; contentType = 'video';
+  editingId = null; selectedTags = []; timestamps = []; imgData = null; contentType = 'video'; selectedPlatform = '';
   document.getElementById('m-url').value = '';
   document.getElementById('m-archive').value = '';
   document.getElementById('m-title').value = '';
@@ -652,14 +689,14 @@ window.openAdd = function() {
   document.querySelector('#add-modal h2').textContent = 'クリエイティブを追加';
   document.querySelector('.btn-save').textContent = '保存する';
   setContentType('video');
-  renderTagSelect(); renderTsList();
+  renderTagSelect(); renderTsList(); renderPlatformSelect();
   document.getElementById('add-modal').style.display = 'block';
 }
 
 window.openEdit = function(id) {
   const v = videos.find(x => x.id === id); if (!v) return;
   editingId = id; selectedTags = [...(v.tags||[])]; timestamps = [...(v.timestamps||[])]; imgData = v.img || null;
-  contentType = v.contentType || 'video';
+  contentType = v.contentType || 'video'; selectedPlatform = v.platform || '';
   document.getElementById('m-url').value = v.url || '';
   document.getElementById('m-archive').value = v.archiveUrl || '';
   document.getElementById('m-title').value = v.title || '';
@@ -670,7 +707,7 @@ window.openEdit = function(id) {
   document.querySelector('#add-modal h2').textContent = 'クリエイティブを編集';
   document.querySelector('.btn-save').textContent = '更新する';
   setContentType(contentType);
-  renderTagSelect(); renderTsList();
+  renderTagSelect(); renderTsList(); renderPlatformSelect();
   closeDetail();
   document.getElementById('add-modal').style.display = 'block';
 }
@@ -685,6 +722,7 @@ window.saveVideo = async function() {
     memo: document.getElementById('m-memo').value.trim(),
     tags: [...selectedTags], timestamps: timestamps.filter(t => t.time),
     img: imgData, contentType: contentType || 'video',
+    platform: selectedPlatform || '',
   };
   try {
     if (editingId) {
