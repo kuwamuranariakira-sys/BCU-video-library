@@ -303,7 +303,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOncsbCqNWGQCWt57gNIEZ4ZcJ6Z2ZAEo",
@@ -324,6 +324,7 @@ let selectedTags = [];
 let timestamps = [];
 let imgData = null;
 let videos = [];
+let editingId = null;
 
 // リアルタイム同期
 const q = query(colRef, orderBy("createdAt", "desc"));
@@ -451,6 +452,7 @@ window.render = function() {
 }
 
 window.openAdd = function() {
+  editingId = null;
   selectedTags = []; timestamps = []; imgData = null;
   document.getElementById('m-url').value = '';
   document.getElementById('m-archive').value = '';
@@ -458,7 +460,30 @@ window.openAdd = function() {
   document.getElementById('m-memo').value = '';
   document.getElementById('img-preview').style.display = 'none';
   document.querySelector('.img-upload-area').textContent = 'タップして画像を選択';
+  document.querySelector('#add-modal h2').textContent = '動画を追加';
+  document.querySelector('.btn-save').textContent = '保存する';
   renderTagSelect(); renderTsList();
+  document.getElementById('add-modal').style.display = 'block';
+}
+
+window.openEdit = function(id) {
+  const v = videos.find(x => x.id === id);
+  if (!v) return;
+  editingId = id;
+  selectedTags = [...(v.tags||[])];
+  timestamps = [...(v.timestamps||[])];
+  imgData = v.img || null;
+  document.getElementById('m-url').value = v.url || '';
+  document.getElementById('m-archive').value = v.archiveUrl || '';
+  document.getElementById('m-title').value = v.title || '';
+  document.getElementById('m-memo').value = v.memo || '';
+  const prev = document.getElementById('img-preview');
+  if (imgData) { prev.src = imgData; prev.style.display = 'block'; document.querySelector('.img-upload-area').textContent = 'タップして変更'; }
+  else { prev.style.display = 'none'; document.querySelector('.img-upload-area').textContent = 'タップして画像を選択'; }
+  document.querySelector('#add-modal h2').textContent = '動画を編集';
+  document.querySelector('.btn-save').textContent = '更新する';
+  renderTagSelect(); renderTsList();
+  closeDetail();
   document.getElementById('add-modal').style.display = 'block';
 }
 
@@ -475,12 +500,18 @@ window.saveVideo = async function() {
     tags: [...selectedTags],
     timestamps: timestamps.filter(t => t.time),
     img: imgData,
-    createdAt: Date.now()
   };
   try {
-    await addDoc(colRef, v);
-    closeAdd();
-    showStatus('保存しました');
+    if (editingId) {
+      await updateDoc(doc(db, "videos", editingId), v);
+      closeAdd();
+      showStatus('更新しました');
+    } else {
+      v.createdAt = Date.now();
+      await addDoc(colRef, v);
+      closeAdd();
+      showStatus('保存しました');
+    }
   } catch(e) {
     alert('保存に失敗しました: ' + e.message);
   }
@@ -511,6 +542,7 @@ window.openDetail = function(id) {
     ${v.memo ? `<div style="font-size:13px;color:var(--text2);line-height:1.7;background:var(--bg);padding:12px;border-radius:10px;margin-bottom:12px">${v.memo}</div>` : ''}
     ${v.url ? `<a class="open-link" href="${v.url}" target="_blank">動画を開く →</a>` : ''}
     ${v.archiveUrl ? `<a class="archive-link" href="${v.archiveUrl}" target="_blank">アーカイブを開く（Drive等）→</a>` : ''}
+    <button class="del-btn" style="margin-top:8px;background:#1e1a3a;color:#AFA9EC;border-color:#3a3060" onclick="openEdit('${v.id}')">編集する</button>
     <button class="del-btn" onclick="deleteVideo('${v.id}')">削除する</button>
   `;
   document.getElementById('detail-modal').style.display = 'block';
