@@ -6,125 +6,77 @@
 <title>参考動画ライブラリ</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap');
-
   :root {
-    --bg: #0c0c10;
-    --bg2: #14141a;
-    --bg3: #1c1c24;
-    --bg4: #242430;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.12);
-    --text: #e8e8f0;
-    --text2: #8888a0;
-    --text3: #55556a;
-    --accent: #7c6fff;
-    --accent2: #5b54cc;
-    --teal: #2dd4a0;
-    --amber: #f0a030;
-    --coral: #f07060;
-    --pink: #d466a0;
-    --blue: #4499ee;
+    --bg: #0c0c10; --bg2: #14141a; --bg3: #1c1c24; --bg4: #242430;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #e8e8f0; --text2: #8888a0; --text3: #55556a;
+    --accent: #7c6fff; --accent2: #5b54cc;
+    --teal: #2dd4a0; --amber: #f0a030; --coral: #f07060; --pink: #d466a0; --blue: #4499ee;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
   #app { max-width: 480px; margin: 0 auto; padding: 16px; }
 
+  /* Login screen */
+  #login-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; gap: 24px; padding: 40px 20px;
+  }
+  .login-logo { width: 56px; height: 56px; background: var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: center; }
+  .login-logo svg { width: 28px; height: 28px; fill: #fff; }
+  .login-title { font-size: 22px; font-weight: 500; color: var(--text); text-align: center; }
+  .login-sub { font-size: 14px; color: var(--text2); text-align: center; line-height: 1.6; }
+  .google-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 13px 24px;
+    font-size: 14px; font-weight: 500; color: var(--text);
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .google-btn:hover { background: var(--bg3); }
+  .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
   /* Header */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 4px 0;
-  }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 4px 0; }
   .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-mark {
-    width: 30px; height: 30px;
-    background: var(--accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
+  .logo-mark { width: 30px; height: 30px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
   .logo-mark svg { width: 15px; height: 15px; fill: #fff; }
   .logo-text { font-size: 15px; font-weight: 500; color: var(--text); }
-  .add-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 9px 16px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.15s;
-  }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .user-avatar { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 1px solid var(--border2); }
+  .user-avatar-placeholder { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #fff; cursor: pointer; }
+  .add-btn { background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 9px 16px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: background 0.15s; }
   .add-btn:hover { background: var(--accent2); }
+
+  /* User menu */
+  .user-menu { position: absolute; right: 16px; top: 60px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 12px; padding: 8px; z-index: 50; min-width: 180px; }
+  .user-menu-name { font-size: 13px; color: var(--text2); padding: 8px 10px 6px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+  .user-menu-btn { width: 100%; padding: 9px 10px; background: none; border: none; color: var(--text); font-size: 13px; cursor: pointer; text-align: left; border-radius: 8px; font-family: inherit; }
+  .user-menu-btn:hover { background: var(--bg3); }
+
+  /* Tabs */
+  .tab-row { display: flex; gap: 4px; margin-bottom: 14px; background: var(--bg2); border-radius: 10px; padding: 4px; }
+  .tab-btn { flex: 1; padding: 8px; border: none; background: none; color: var(--text2); font-size: 13px; cursor: pointer; border-radius: 7px; font-family: inherit; transition: all 0.15s; }
+  .tab-btn.active { background: var(--accent); color: #fff; font-weight: 500; }
 
   /* Search */
   .search-wrap { position: relative; margin-bottom: 14px; }
-  .search-icon {
-    position: absolute; left: 13px; top: 50%;
-    transform: translateY(-50%);
-    width: 14px; height: 14px; color: var(--text3);
-    pointer-events: none;
-  }
-  .search-bar {
-    width: 100%;
-    padding: 11px 14px 11px 38px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--bg2);
-    outline: none;
-    font-family: inherit;
-    transition: border-color 0.15s;
-  }
-  .search-bar:focus { border-color: var(--border2); }
+  .search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text3); pointer-events: none; }
+  .search-bar { width: 100%; padding: 11px 14px 11px 38px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text); background: var(--bg2); outline: none; font-family: inherit; }
   .search-bar::placeholder { color: var(--text3); }
 
-  /* Tags */
-  .tag-row {
-    display: flex; gap: 6px;
-    overflow-x: auto; margin-bottom: 20px;
-    padding-bottom: 2px; scrollbar-width: none;
-  }
+  /* Tag row */
+  .tag-row { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 2px; scrollbar-width: none; }
   .tag-row::-webkit-scrollbar { display: none; }
-  .tag-pill {
-    padding: 6px 14px; border-radius: 20px;
-    font-size: 12px; cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--bg2); color: var(--text2);
-    white-space: nowrap; flex-shrink: 0;
-    font-family: inherit; transition: all 0.15s;
-  }
+  .tag-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); white-space: nowrap; flex-shrink: 0; font-family: inherit; transition: all 0.15s; }
   .tag-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
   .section-label { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
 
   /* Cards */
-  .card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 14px; padding: 14px;
-    margin-bottom: 10px; cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .card:hover { border-color: var(--accent2); background: var(--bg3); }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s; }
+  .card:hover { border-color: var(--accent2); }
   .card-top { display: flex; gap: 12px; align-items: flex-start; }
-  .thumb {
-    width: 88px; height: 56px; border-radius: 10px;
-    background: var(--bg3); flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
-  }
+  .thumb { width: 88px; height: 56px; border-radius: 10px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
   .thumb-placeholder { font-size: 10px; color: var(--text3); text-align: center; padding: 4px; line-height: 1.4; }
   .card-info { flex: 1; min-width: 0; }
@@ -147,65 +99,42 @@
   .card-memo { font-size: 12px; color: var(--text2); margin-top: 9px; line-height: 1.6; border-top: 1px solid var(--border); padding-top: 9px; }
   .ts-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
   .ts-chip { font-size: 11px; padding: 3px 9px; border-radius: 6px; background: #1e1a3a; color: #AFA9EC; font-weight: 500; font-family: 'DM Mono', monospace; }
+
+  /* Card footer: uploader + likes */
+  .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border); }
+  .uploader { display: flex; align-items: center; gap: 6px; }
+  .uploader-avatar { width: 18px; height: 18px; border-radius: 50%; }
+  .uploader-avatar-placeholder { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 8px; color: #fff; font-weight: 500; }
+  .uploader-name { font-size: 11px; color: var(--text3); }
+  .card-actions { display: flex; align-items: center; gap: 10px; }
+  .like-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; font-size: 11px; color: var(--text3); font-family: inherit; padding: 2px 4px; border-radius: 6px; transition: all 0.15s; }
+  .like-btn.liked { color: #f07060; }
+  .like-btn svg { width: 14px; height: 14px; }
+  .comment-count { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
+  .comment-count svg { width: 13px; height: 13px; }
+
   .empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; line-height: 1.8; }
   .empty-icon { width: 48px; height: 48px; background: var(--bg2); border-radius: 12px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; }
 
-  /* Status */
-  .status-bar {
-    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-    background: var(--bg3); border: 1px solid var(--border2);
-    border-radius: 10px; padding: 10px 18px;
-    font-size: 13px; color: var(--text2);
-    display: none; z-index: 200; white-space: nowrap;
-  }
+  /* Status bar */
+  .status-bar { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; padding: 10px 18px; font-size: 13px; color: var(--text2); display: none; z-index: 200; white-space: nowrap; }
   .status-bar.show { display: block; }
 
   /* Overlay / Modal */
-  .overlay {
-    display: none; position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.75); z-index: 100;
-    overflow-y: auto;
-  }
-  .modal {
-    background: var(--bg2);
-    border-radius: 16px 16px 0 0;
-    padding: 20px; width: 100%; max-width: 480px;
-    margin: 80px auto 0;
-  }
+  .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 100; overflow-y: auto; }
+  .modal { background: var(--bg2); border-radius: 16px 16px 0 0; padding: 20px; width: 100%; max-width: 480px; margin: 80px auto 0; }
   .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 18px; color: var(--text); }
   .field { margin-bottom: 14px; }
   .field label { font-size: 11px; color: var(--text3); display: block; margin-bottom: 6px; letter-spacing: 0.3px; text-transform: uppercase; }
-  .field input, .field textarea {
-    width: 100%; padding: 11px 13px;
-    border: 1px solid var(--border);
-    border-radius: 10px; font-size: 14px;
-    color: var(--text); background: var(--bg);
-    outline: none; font-family: inherit;
-    transition: border-color 0.15s;
-  }
-  .field input:focus, .field textarea:focus { border-color: var(--border2); }
+  .field input, .field textarea { width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; color: var(--text); background: var(--bg); outline: none; font-family: inherit; }
   .field input::placeholder, .field textarea::placeholder { color: var(--text3); }
   .field textarea { height: 72px; resize: none; line-height: 1.5; }
   .tag-select { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag-toggle {
-    padding: 6px 13px; border-radius: 20px; font-size: 12px;
-    border: 1px solid var(--border); background: var(--bg);
-    color: var(--text3); cursor: pointer; font-family: inherit; transition: all 0.15s;
-  }
+  .tag-toggle { padding: 6px 13px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text3); cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .tag-toggle.sel { border-color: var(--accent); background: #1e1a3a; color: #AFA9EC; }
   .modal-btns { display: flex; gap: 8px; margin-top: 18px; padding-bottom: 20px; }
-  .btn-cancel {
-    flex: 1; padding: 12px; border: 1px solid var(--border);
-    border-radius: 10px; background: none; color: var(--text2);
-    font-size: 14px; cursor: pointer; font-family: inherit;
-  }
-  .btn-save {
-    flex: 2; padding: 12px; border: none; border-radius: 10px;
-    background: var(--accent); color: #fff; font-size: 14px;
-    font-weight: 500; cursor: pointer; font-family: inherit; transition: background 0.15s;
-  }
-  .btn-save:hover { background: var(--accent2); }
+  .btn-cancel { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: none; color: var(--text2); font-size: 14px; cursor: pointer; font-family: inherit; }
+  .btn-save { flex: 2; padding: 12px; border: none; border-radius: 10px; background: var(--accent); color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
 
   /* Timestamps */
   .ts-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
@@ -214,20 +143,10 @@
   .ts-label-input { flex: 1; background: none; border: none; color: var(--text); font-size: 13px; outline: none; font-family: inherit; }
   .ts-label-input::placeholder { color: var(--text3); }
   .ts-del { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 0 2px; line-height: 1; }
-  .add-ts-btn {
-    width: 100%; padding: 9px; border: 1px dashed var(--border2);
-    border-radius: 8px; background: none; color: var(--text3);
-    font-size: 13px; cursor: pointer; margin-top: 6px; font-family: inherit; transition: color 0.15s;
-  }
-  .add-ts-btn:hover { color: var(--text2); }
+  .add-ts-btn { width: 100%; padding: 9px; border: 1px dashed var(--border2); border-radius: 8px; background: none; color: var(--text3); font-size: 13px; cursor: pointer; margin-top: 6px; font-family: inherit; }
 
   /* Image upload */
-  .img-upload-area {
-    width: 100%; padding: 20px; border: 1px dashed var(--border2);
-    border-radius: 10px; background: var(--bg); text-align: center;
-    cursor: pointer; color: var(--text3); font-size: 13px; transition: color 0.15s;
-  }
-  .img-upload-area:hover { color: var(--text2); }
+  .img-upload-area { width: 100%; padding: 20px; border: 1px dashed var(--border2); border-radius: 10px; background: var(--bg); text-align: center; cursor: pointer; color: var(--text3); font-size: 13px; }
   .img-preview { width: 100%; height: 120px; border-radius: 10px; object-fit: cover; margin-top: 8px; display: none; }
 
   /* Detail modal */
@@ -235,39 +154,92 @@
   .detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .open-link { display: block; text-align: center; margin-top: 10px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: #AFA9EC; text-decoration: none; background: #1e1a3a; }
   .archive-link { display: block; text-align: center; margin-top: 6px; padding: 10px; border: 1px solid #1e2a1e; border-radius: 10px; font-size: 13px; color: var(--teal); text-decoration: none; background: #0d2420; }
-  .del-btn { margin-top: 8px; width: 100%; padding: 11px; border: 1px solid var(--border); border-radius: 10px; background: none; color: var(--text3); font-size: 13px; cursor: pointer; font-family: inherit; }
+  .action-btn { margin-top: 8px; width: 100%; padding: 11px; border: 1px solid var(--border); border-radius: 10px; background: none; color: var(--text2); font-size: 13px; cursor: pointer; font-family: inherit; }
+  .edit-btn { background: #1e1a3a; color: #AFA9EC; border-color: #3a3060; }
+  .del-btn { color: var(--text3); }
   .detail-ts-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
   .detail-ts-item { display: flex; align-items: center; gap: 10px; background: var(--bg); border-radius: 8px; padding: 9px 12px; }
   .detail-ts-time { font-size: 13px; color: #AFA9EC; font-weight: 500; min-width: 44px; font-family: 'DM Mono', monospace; }
   .detail-ts-label { font-size: 13px; color: var(--text2); }
 
-  /* Loading */
+  /* Like button in detail */
+  .detail-like-btn { width: 100%; margin-top: 10px; padding: 11px; border: 1px solid var(--border); border-radius: 10px; background: none; color: var(--text2); font-size: 13px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.15s; }
+  .detail-like-btn.liked { background: #2a1008; color: #F0997B; border-color: #4a2010; }
+  .detail-like-btn svg { width: 15px; height: 15px; }
+
+  /* Comments */
+  .comments-section { margin-top: 16px; }
+  .comments-title { font-size: 12px; color: var(--text3); letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 10px; }
+  .comment-item { display: flex; gap: 8px; margin-bottom: 12px; }
+  .comment-avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; }
+  .comment-avatar-placeholder { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; font-weight: 500; flex-shrink: 0; }
+  .comment-body { flex: 1; }
+  .comment-name { font-size: 11px; color: var(--text3); margin-bottom: 3px; }
+  .comment-text { font-size: 13px; color: var(--text2); line-height: 1.5; background: var(--bg); padding: 8px 10px; border-radius: 8px; }
+  .comment-input-wrap { display: flex; gap: 8px; margin-top: 12px; align-items: flex-end; }
+  .comment-input { flex: 1; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: var(--text); background: var(--bg); outline: none; font-family: inherit; resize: none; height: 40px; line-height: 1.4; }
+  .comment-input::placeholder { color: var(--text3); }
+  .comment-send-btn { padding: 10px 14px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-size: 13px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+
   .loading { text-align: center; padding: 40px; color: var(--text3); font-size: 14px; }
   .spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="header">
-    <div class="logo">
-      <div class="logo-mark">
-        <svg viewBox="0 0 16 16"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg>
-      </div>
-      <span class="logo-text">参考動画ライブラリ</span>
-    </div>
-    <button class="add-btn" onclick="openAdd()">+ 追加</button>
+
+<!-- Login Screen -->
+<div id="login-screen" style="display:none">
+  <div class="login-logo">
+    <svg viewBox="0 0 16 16"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg>
   </div>
-  <div class="search-wrap">
-    <svg class="search-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1a5.5 5.5 0 1 0 3.45 9.86l2.6 2.6a.75.75 0 1 0 1.06-1.06l-2.6-2.6A5.5 5.5 0 0 0 6.5 1zm-4 5.5a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/></svg>
-    <input class="search-bar" placeholder="タイトル・メモで検索..." oninput="render()" id="search">
+  <div>
+    <div class="login-title">参考動画ライブラリ</div>
+    <div class="login-sub" style="margin-top:8px">チームで動画の演出・訴求を共有するツール</div>
   </div>
-  <div class="tag-row" id="tag-row"></div>
-  <div class="section-label" id="count-label"></div>
-  <div id="list"><div class="loading"><div class="spinner"></div>読み込み中...</div></div>
+  <button class="google-btn" onclick="signInWithGoogle()">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+    Googleでログイン
+  </button>
 </div>
 
-<!-- Add Modal -->
+<!-- Main App -->
+<div id="main-app" style="display:none">
+  <div id="app">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-mark"><svg viewBox="0 0 16 16"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg></div>
+        <span class="logo-text">参考動画ライブラリ</span>
+      </div>
+      <div class="header-right">
+        <button class="add-btn" onclick="openAdd()">+ 追加</button>
+        <div id="user-avatar-wrap" onclick="toggleUserMenu()"></div>
+      </div>
+    </div>
+    <div id="user-menu" class="user-menu" style="display:none;position:absolute;right:16px;top:60px;z-index:50">
+      <div class="user-menu-name" id="user-menu-name"></div>
+      <button class="user-menu-btn" onclick="signOut()">ログアウト</button>
+    </div>
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-all" onclick="setTab('all')">すべて</button>
+      <button class="tab-btn" id="tab-fav" onclick="setTab('fav')">お気に入り</button>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1a5.5 5.5 0 1 0 3.45 9.86l2.6 2.6a.75.75 0 1 0 1.06-1.06l-2.6-2.6A5.5 5.5 0 0 0 6.5 1zm-4 5.5a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/></svg>
+      <input class="search-bar" placeholder="タイトル・メモで検索..." oninput="render()" id="search">
+    </div>
+    <div class="tag-row" id="tag-row"></div>
+    <div class="section-label" id="count-label"></div>
+    <div id="list"><div class="loading"><div class="spinner"></div>読み込み中...</div></div>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
 <div class="overlay" id="add-modal">
   <div class="modal">
     <h2>動画を追加</h2>
@@ -280,7 +252,7 @@
       <input type="file" id="img-input" accept="image/*" style="display:none" onchange="onImgSelect(event)">
       <img id="img-preview" class="img-preview">
     </div>
-    <div class="field"><label>メモ</label><textarea id="m-memo" placeholder="この演出がいい、冒頭の掴みがうまい、カメラが低い…など"></textarea></div>
+    <div class="field"><label>メモ</label><textarea id="m-memo" placeholder="この演出がいい、冒頭の掴みがうまい…など"></textarea></div>
     <div class="field">
       <label>タイムスタンプ（見てほしい場面）</label>
       <div class="ts-list" id="ts-list"></div>
@@ -303,7 +275,8 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot, updateDoc, getDoc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOncsbCqNWGQCWt57gNIEZ4ZcJ6Z2ZAEo",
@@ -316,22 +289,89 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 const colRef = collection(db, "videos");
 
 const TAGS = ['演出','訴求','構成','撮影','テキスト','音楽'];
 let activeTag = 'すべて';
+let activeTab = 'all';
 let selectedTags = [];
 let timestamps = [];
 let imgData = null;
 let videos = [];
 let editingId = null;
+let currentUser = null;
+let myLikes = {};
 
-// リアルタイム同期
-const q = query(colRef, orderBy("createdAt", "desc"));
-onSnapshot(q, (snapshot) => {
-  videos = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-  render();
+// Auth state
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+    renderUserAvatar();
+    await loadMyLikes();
+    startVideoListener();
+  } else {
+    currentUser = null;
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('main-app').style.display = 'none';
+  }
 });
+
+window.signInWithGoogle = async function() {
+  try { await signInWithPopup(auth, provider); } catch(e) { alert('ログインに失敗しました: ' + e.message); }
+}
+
+window.signOut = async function() {
+  await fbSignOut(auth);
+  document.getElementById('user-menu').style.display = 'none';
+}
+
+window.toggleUserMenu = function() {
+  const m = document.getElementById('user-menu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('user-menu');
+  const wrap = document.getElementById('user-avatar-wrap');
+  if (menu && wrap && !menu.contains(e.target) && !wrap.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+
+function renderUserAvatar() {
+  const wrap = document.getElementById('user-avatar-wrap');
+  const nameEl = document.getElementById('user-menu-name');
+  if (!currentUser) return;
+  nameEl.textContent = currentUser.displayName || currentUser.email;
+  if (currentUser.photoURL) {
+    wrap.innerHTML = `<img src="${currentUser.photoURL}" class="user-avatar">`;
+  } else {
+    const initials = (currentUser.displayName || 'U').charAt(0).toUpperCase();
+    wrap.innerHTML = `<div class="user-avatar-placeholder">${initials}</div>`;
+  }
+}
+
+async function loadMyLikes() {
+  if (!currentUser) return;
+  try {
+    const likesCol = collection(db, "users", currentUser.uid, "likes");
+    const snap = await getDocs(likesCol);
+    myLikes = {};
+    snap.forEach(d => { myLikes[d.id] = true; });
+  } catch(e) {}
+}
+
+function startVideoListener() {
+  const q = query(colRef, orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    videos = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    render();
+  });
+}
 
 function getThumbnail(url) {
   try {
@@ -352,16 +392,25 @@ function getSource(url) {
   if (url.includes('tiktok')) return 'tt';
   return 'other';
 }
-
-function sourceLabel(s) {
-  return { yt: 'YouTube', tt: 'TikTok', other: 'URL', 'no-url': 'URLなし' }[s] || 'URL';
-}
+function sourceLabel(s) { return { yt: 'YouTube', tt: 'TikTok', other: 'URL', 'no-url': 'URLなし' }[s] || 'URL'; }
 
 function showStatus(msg) {
   const el = document.getElementById('status-bar');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function avatarHtml(photoURL, displayName, size = 18) {
+  if (photoURL) return `<img src="${photoURL}" style="width:${size}px;height:${size}px;border-radius:50%;">`;
+  const initial = (displayName || 'U').charAt(0).toUpperCase();
+  return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:${Math.floor(size*0.45)}px;color:#fff;font-weight:500;flex-shrink:0">${initial}</div>`;
+}
+
+window.setTab = function(tab) {
+  activeTab = tab;
+  document.getElementById('tab-all').classList.toggle('active', tab === 'all');
+  document.getElementById('tab-fav').classList.toggle('active', tab === 'fav');
+  render();
 }
 
 window.renderTagRow = function() {
@@ -370,19 +419,17 @@ window.renderTagRow = function() {
     `<button class="tag-pill${activeTag===t?' active':''}" onclick="setTag('${t}')">${t}</button>`
   ).join('');
 }
+window.setTag = function(t) { activeTag = t; render(); }
 
 window.renderTagSelect = function() {
   document.getElementById('tag-select').innerHTML = TAGS.map(t =>
     `<span class="tag-toggle${selectedTags.includes(t)?' sel':''}" onclick="toggleTag('${t}')">${t}</span>`
   ).join('');
 }
-
 window.toggleTag = function(t) {
   selectedTags = selectedTags.includes(t) ? selectedTags.filter(x=>x!==t) : [...selectedTags, t];
   renderTagSelect();
 }
-
-window.setTag = function(t) { activeTag = t; render(); }
 
 window.renderTsList = function() {
   document.getElementById('ts-list').innerHTML = timestamps.map((ts, i) => `
@@ -392,17 +439,11 @@ window.renderTsList = function() {
       <button class="ts-del" onclick="removeTs(${i})">×</button>
     </div>`).join('');
 }
-
-window.addTs = function() {
-  timestamps.push({ time: '0:00', label: '' });
-  renderTsList();
-}
-
+window.addTs = function() { timestamps.push({ time: '0:00', label: '' }); renderTsList(); }
 window.removeTs = function(i) { timestamps.splice(i, 1); renderTsList(); }
 
 window.onImgSelect = function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     imgData = ev.target.result;
@@ -419,41 +460,158 @@ window.render = function() {
   let list = videos.filter(v => {
     const matchTag = activeTag === 'すべて' || (v.tags||[]).includes(activeTag);
     const matchQ = !q || (v.title||'').toLowerCase().includes(q) || (v.memo||'').toLowerCase().includes(q);
-    return matchTag && matchQ;
+    const matchFav = activeTab === 'all' || myLikes[v.id];
+    return matchTag && matchQ && matchFav;
   });
-  const lbl = document.getElementById('count-label');
-  lbl.textContent = list.length > 0 ? list.length + '件' : '';
+  document.getElementById('count-label').textContent = list.length > 0 ? list.length + '件' : '';
   const el = document.getElementById('list');
   if (!list.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="#55556a"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg></div>動画がまだありません<br>「+ 追加」から参考動画を登録しましょう</div>`;
+    const msg = activeTab === 'fav' ? 'お気に入りがまだありません' : '動画がまだありません<br>「+ 追加」から参考動画を登録しましょう';
+    el.innerHTML = `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="#55556a"><path d="M2 3h12v2H2zm0 4h8v2H2zm0 4h10v2H2z"/></svg></div>${msg}</div>`;
     return;
   }
   el.innerHTML = list.map(v => {
     const src = getSource(v.url);
     const thumb = getThumbnail(v.url) || (v.img || null);
     const tsChips = v.timestamps && v.timestamps.length
-      ? '<div class="ts-row">' + v.timestamps.map(ts => `<span class="ts-chip">${ts.time}${ts.label ? ' ' + ts.label : ''}</span>`).join('') + '</div>' : '';
+      ? '<div class="ts-row">' + v.timestamps.map(ts => `<span class="ts-chip">${ts.time}${ts.label?' '+ts.label:''}</span>`).join('') + '</div>' : '';
+    const liked = myLikes[v.id];
+    const likeCount = v.likeCount || 0;
+    const commentCount = v.commentCount || 0;
+    const uploaderAvatar = avatarHtml(v.uploaderPhotoURL, v.uploaderName, 18);
     return `<div class="card" onclick="openDetail('${v.id}')">
       <div class="card-top">
-        <div class="thumb">${thumb ? `<img src="${thumb}" onerror="this.parentNode.innerHTML='<div class=thumb-placeholder>${sourceLabel(src)}</div>'">` : `<div class="thumb-placeholder">${sourceLabel(src)}</div>`}</div>
+        <div class="thumb">${thumb?`<img src="${thumb}" onerror="this.parentNode.innerHTML='<div class=thumb-placeholder>${sourceLabel(src)}</div>'">`:`<div class="thumb-placeholder">${sourceLabel(src)}</div>`}</div>
         <div class="card-info">
-          <div class="card-title">${v.title || '(タイトルなし)'}</div>
+          <div class="card-title">${v.title||'(タイトルなし)'}</div>
           <div class="card-meta">
             <span class="source-badge ${src}">${sourceLabel(src)}</span>
-            ${v.archiveUrl ? '<span class="drive-badge">Drive保存済</span>' : ''}
+            ${v.archiveUrl?'<span class="drive-badge">Drive保存済</span>':''}
           </div>
-          <div class="card-tags">${(v.tags||[]).map(t => `<span class="card-tag tag-${t}">${t}</span>`).join('')}</div>
+          <div class="card-tags">${(v.tags||[]).map(t=>`<span class="card-tag tag-${t}">${t}</span>`).join('')}</div>
         </div>
       </div>
       ${tsChips}
-      ${v.memo ? `<div class="card-memo">${v.memo}</div>` : ''}
+      ${v.memo?`<div class="card-memo">${v.memo}</div>`:''}
+      <div class="card-footer">
+        <div class="uploader">${uploaderAvatar}<span class="uploader-name">${v.uploaderName||'不明'}</span></div>
+        <div class="card-actions">
+          <span class="comment-count"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.678 11.894a1 1 0 0 1 .287.801 11 11 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8 8 0 0 0 8 14c3.996 0 7-2.807 7-6s-3.004-6-7-6-7 2.808-7 6c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a22 22 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a10 10 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/></svg>${commentCount}</span>
+          <button class="like-btn${liked?' liked':''}" onclick="event.stopPropagation();toggleLike('${v.id}')">
+            <svg viewBox="0 0 16 16" fill="${liked?'currentColor':'none'}" stroke="currentColor" stroke-width="1.2"><path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z"/></svg>
+            ${likeCount}
+          </button>
+        </div>
+      </div>
     </div>`;
   }).join('');
 }
 
+window.toggleLike = async function(videoId) {
+  if (!currentUser) return;
+  const likeRef = doc(db, "users", currentUser.uid, "likes", videoId);
+  const videoRef = doc(db, "videos", videoId);
+  const v = videos.find(x => x.id === videoId);
+  if (!v) return;
+  if (myLikes[videoId]) {
+    delete myLikes[videoId];
+    await deleteDoc(likeRef);
+    await updateDoc(videoRef, { likeCount: Math.max(0, (v.likeCount||0) - 1) });
+  } else {
+    myLikes[videoId] = true;
+    await setDoc(likeRef, { videoId, createdAt: Date.now() });
+    await updateDoc(videoRef, { likeCount: (v.likeCount||0) + 1 });
+  }
+  render();
+}
+
+window.openDetail = async function(id) {
+  const v = videos.find(x => x.id === id);
+  if (!v) return;
+  const src = getSource(v.url);
+  const thumb = getThumbnail(v.url) || (v.img || null);
+  const liked = myLikes[id];
+  const likeCount = v.likeCount || 0;
+  const tsHtml = v.timestamps && v.timestamps.length
+    ? `<div style="margin-bottom:12px"><div style="font-size:11px;color:var(--text3);letter-spacing:0.3px;text-transform:uppercase;margin-bottom:8px">タイムスタンプ</div><div class="detail-ts-list">${v.timestamps.map(ts=>`<div class="detail-ts-item"><span class="detail-ts-time">${ts.time}</span><span class="detail-ts-label">${ts.label||''}</span></div>`).join('')}</div></div>` : '';
+
+  // load comments
+  let commentsHtml = '';
+  try {
+    const commentsCol = collection(db, "videos", id, "comments");
+    const cSnap = await getDocs(query(commentsCol, orderBy("createdAt", "asc")));
+    const comments = cSnap.docs.map(d => d.data());
+    commentsHtml = comments.map(c => `
+      <div class="comment-item">
+        ${avatarHtml(c.authorPhotoURL, c.authorName, 26)}
+        <div class="comment-body">
+          <div class="comment-name">${c.authorName||'不明'}</div>
+          <div class="comment-text">${c.text}</div>
+        </div>
+      </div>`).join('');
+  } catch(e) {}
+
+  const uploaderAvatar = avatarHtml(v.uploaderPhotoURL, v.uploaderName, 22);
+
+  document.getElementById('detail-content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <span style="font-size:15px;font-weight:500;color:var(--text);flex:1;margin-right:12px">${v.title}</span>
+      <button style="background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;line-height:1" onclick="closeDetail()">×</button>
+    </div>
+    <div class="detail-thumb">${thumb?`<img src="${thumb}" onerror="this.style.display='none'">`:`<span style="font-size:13px;color:var(--text3)">${sourceLabel(src)}</span>`}</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <span class="source-badge ${src}">${sourceLabel(src)}</span>
+      ${(v.tags||[]).map(t=>`<span class="card-tag tag-${t}">${t}</span>`).join('')}
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">${uploaderAvatar}<span style="font-size:12px;color:var(--text3)">投稿: ${v.uploaderName||'不明'}</span></div>
+    ${tsHtml}
+    ${v.memo?`<div style="font-size:13px;color:var(--text2);line-height:1.7;background:var(--bg);padding:12px;border-radius:10px;margin-bottom:10px">${v.memo}</div>`:''}
+    <button class="detail-like-btn${liked?' liked':''}" onclick="toggleLike('${id}');this.classList.toggle('liked');this.querySelector('span').textContent=parseInt(this.querySelector('span').textContent)+(myLikes['${id}']?1:-1)">
+      <svg viewBox="0 0 16 16" fill="${liked?'currentColor':'none'}" stroke="currentColor" stroke-width="1.2"><path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z"/></svg>
+      お気に入り <span>${likeCount}</span>
+    </button>
+    ${v.url?`<a class="open-link" href="${v.url}" target="_blank">動画を開く →</a>`:''}
+    ${v.archiveUrl?`<a class="archive-link" href="${v.archiveUrl}" target="_blank">アーカイブを開く →</a>`:''}
+    ${v.uploaderId===currentUser?.uid?`<button class="action-btn edit-btn" onclick="openEdit('${id}')">編集する</button><button class="action-btn del-btn" onclick="deleteVideo('${id}')">削除する</button>`:''}
+    <div class="comments-section">
+      <div class="comments-title">コメント</div>
+      <div id="comments-list-${id}">${commentsHtml || '<div style="font-size:13px;color:var(--text3);padding:8px 0">まだコメントはありません</div>'}</div>
+      <div class="comment-input-wrap">
+        <textarea class="comment-input" id="comment-input-${id}" placeholder="コメントを入力..." rows="1"></textarea>
+        <button class="comment-send-btn" onclick="postComment('${id}')">送信</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('detail-modal').style.display = 'block';
+}
+
+window.postComment = async function(videoId) {
+  const input = document.getElementById('comment-input-' + videoId);
+  const text = input.value.trim();
+  if (!text || !currentUser) return;
+  try {
+    const commentsCol = collection(db, "videos", videoId, "comments");
+    await addDoc(commentsCol, {
+      text, authorName: currentUser.displayName || currentUser.email,
+      authorPhotoURL: currentUser.photoURL || null,
+      authorId: currentUser.uid, createdAt: Date.now()
+    });
+    const videoRef = doc(db, "videos", videoId);
+    const v = videos.find(x => x.id === videoId);
+    await updateDoc(videoRef, { commentCount: (v?.commentCount||0) + 1 });
+    input.value = '';
+    const listEl = document.getElementById('comments-list-' + videoId);
+    const newComment = `<div class="comment-item">${avatarHtml(currentUser.photoURL, currentUser.displayName, 26)}<div class="comment-body"><div class="comment-name">${currentUser.displayName||'不明'}</div><div class="comment-text">${text}</div></div></div>`;
+    if (listEl.querySelector('[style*="color:var(--text3)"]')) listEl.innerHTML = newComment;
+    else listEl.innerHTML += newComment;
+    showStatus('コメントしました');
+  } catch(e) { alert('コメントに失敗しました: ' + e.message); }
+}
+
+window.closeDetail = function() { document.getElementById('detail-modal').style.display = 'none'; }
+
 window.openAdd = function() {
-  editingId = null;
-  selectedTags = []; timestamps = []; imgData = null;
+  editingId = null; selectedTags = []; timestamps = []; imgData = null;
   document.getElementById('m-url').value = '';
   document.getElementById('m-archive').value = '';
   document.getElementById('m-title').value = '';
@@ -467,12 +625,8 @@ window.openAdd = function() {
 }
 
 window.openEdit = function(id) {
-  const v = videos.find(x => x.id === id);
-  if (!v) return;
-  editingId = id;
-  selectedTags = [...(v.tags||[])];
-  timestamps = [...(v.timestamps||[])];
-  imgData = v.img || null;
+  const v = videos.find(x => x.id === id); if (!v) return;
+  editingId = id; selectedTags = [...(v.tags||[])]; timestamps = [...(v.timestamps||[])]; imgData = v.img || null;
   document.getElementById('m-url').value = v.url || '';
   document.getElementById('m-archive').value = v.archiveUrl || '';
   document.getElementById('m-title').value = v.title || '';
@@ -493,74 +647,35 @@ window.saveVideo = async function() {
   const url = document.getElementById('m-url').value.trim();
   const title = document.getElementById('m-title').value.trim() || url || '(タイトルなし)';
   const v = {
-    url,
-    archiveUrl: document.getElementById('m-archive').value.trim(),
-    title,
+    url, archiveUrl: document.getElementById('m-archive').value.trim(), title,
     memo: document.getElementById('m-memo').value.trim(),
-    tags: [...selectedTags],
-    timestamps: timestamps.filter(t => t.time),
-    img: imgData,
+    tags: [...selectedTags], timestamps: timestamps.filter(t => t.time), img: imgData,
   };
   try {
     if (editingId) {
       await updateDoc(doc(db, "videos", editingId), v);
-      closeAdd();
-      showStatus('更新しました');
+      closeAdd(); showStatus('更新しました');
     } else {
       v.createdAt = Date.now();
+      v.uploaderId = currentUser.uid;
+      v.uploaderName = currentUser.displayName || currentUser.email;
+      v.uploaderPhotoURL = currentUser.photoURL || null;
+      v.likeCount = 0; v.commentCount = 0;
       await addDoc(colRef, v);
-      closeAdd();
-      showStatus('保存しました');
+      closeAdd(); showStatus('保存しました');
     }
-  } catch(e) {
-    alert('保存に失敗しました: ' + e.message);
-  }
+  } catch(e) { alert('保存に失敗しました: ' + e.message); }
 }
-
-window.openDetail = function(id) {
-  const v = videos.find(x => x.id === id);
-  if (!v) return;
-  const src = getSource(v.url);
-  const thumb = getThumbnail(v.url) || (v.img || null);
-  const tsHtml = v.timestamps && v.timestamps.length
-    ? `<div style="margin-bottom:12px">
-        <div style="font-size:11px;color:var(--text3);letter-spacing:0.3px;text-transform:uppercase;margin-bottom:8px">タイムスタンプ</div>
-        <div class="detail-ts-list">${v.timestamps.map(ts =>
-          `<div class="detail-ts-item"><span class="detail-ts-time">${ts.time}</span><span class="detail-ts-label">${ts.label||''}</span></div>`
-        ).join('')}</div></div>` : '';
-  document.getElementById('detail-content').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <span style="font-size:15px;font-weight:500;color:var(--text);flex:1;margin-right:12px">${v.title}</span>
-      <button style="background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;line-height:1" onclick="closeDetail()">×</button>
-    </div>
-    <div class="detail-thumb">${thumb ? `<img src="${thumb}" onerror="this.style.display='none'">` : `<span style="font-size:13px;color:var(--text3)">${sourceLabel(src)}</span>`}</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
-      <span class="source-badge ${src}">${sourceLabel(src)}</span>
-      ${(v.tags||[]).map(t => `<span class="card-tag tag-${t}">${t}</span>`).join('')}
-    </div>
-    ${tsHtml}
-    ${v.memo ? `<div style="font-size:13px;color:var(--text2);line-height:1.7;background:var(--bg);padding:12px;border-radius:10px;margin-bottom:12px">${v.memo}</div>` : ''}
-    ${v.url ? `<a class="open-link" href="${v.url}" target="_blank">動画を開く →</a>` : ''}
-    ${v.archiveUrl ? `<a class="archive-link" href="${v.archiveUrl}" target="_blank">アーカイブを開く（Drive等）→</a>` : ''}
-    <button class="del-btn" style="margin-top:8px;background:#1e1a3a;color:#AFA9EC;border-color:#3a3060" onclick="openEdit('${v.id}')">編集する</button>
-    <button class="del-btn" onclick="deleteVideo('${v.id}')">削除する</button>
-  `;
-  document.getElementById('detail-modal').style.display = 'block';
-}
-
-window.closeDetail = function() { document.getElementById('detail-modal').style.display = 'none'; }
 
 window.deleteVideo = async function(id) {
   if (!confirm('この動画を削除しますか？')) return;
   try {
     await deleteDoc(doc(db, "videos", id));
-    closeDetail();
-    showStatus('削除しました');
-  } catch(e) {
-    alert('削除に失敗しました: ' + e.message);
-  }
+    closeDetail(); showStatus('削除しました');
+  } catch(e) { alert('削除に失敗しました: ' + e.message); }
 }
 
+window.myLikes = myLikes;
 renderTagRow();
 </script>
 </body>
